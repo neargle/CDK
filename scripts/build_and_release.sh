@@ -29,7 +29,7 @@ EOF
 )
 
 date_string=`date -u +"%Y-%m-%d"`
-title="New release and version in $date_string"
+title="New release for $GITHUB_REF in $date_string"
 
-ghr -n "$title" -b "$release_body" "refs/tags/v0.1.16" "bin/"
+ghr -n "$title" -b "$release_body" "$GITHUB_REF" "bin/"
 
