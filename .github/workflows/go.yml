@@ -52,6 +52,6 @@ jobs:
           TAG_VERSION=`echo "$GITHUB_REF" | tr -s 'refs/tags/' '\000'`
           title="New release for $TAG_VERSION in $date_string"
 
-          ghr -n "$title" -b -u neargle "$release_body" "$TAG_VERSION" "bin/"
+          ghr -n "$title" -u neargle -b "$release_body" "$TAG_VERSION" "bin/"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
