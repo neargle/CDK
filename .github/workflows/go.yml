@@ -21,6 +21,6 @@ jobs:
           go get github.com/mitchellh/gox
           go get github.com/tcnksm/ghr
           sudo apt-get install -y upx
-      - run: ./scripts/build_and_release.sh || exit 0
+      - run: bash ./scripts/build_and_release.sh || exit 0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
