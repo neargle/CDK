@@ -21,7 +21,7 @@ upx bin/cdk_linux_386_thin_upx
 
 # get bin sha256
 sha256_text_body=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
-cd -
+cd ..
 release_body=$(cat <<- EOF
 |sha256|exectue file|
 |---|---|
