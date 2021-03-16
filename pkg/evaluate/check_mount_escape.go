@@ -3,7 +3,7 @@ package evaluate
 import (
 	"bufio"
 	"fmt"
-	"github.com/Xyntax/CDK/pkg/errors"
+	"github.com/cdk-team/CDK/pkg/errors"
 	"io"
 	"log"
 	"os"
@@ -65,6 +65,10 @@ func MountEscape() {
 			if !matched {
 				fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
 			}
+		}
+		if m.Device == "lxcfs" && strings.Contains(m.Flags,"rw"){
+			fmt.Println("Find mounted lxcfs with rw flags, run `cdk run lxcfs-rw` to escape container!")
+			fmt.Printf("Device:%s Path:%s Filesystem:%s Flags:%s\n", m.Device, m.Path, m.Filesystem, m.Flags)
 		}
 	}
 }

@@ -1,6 +1,9 @@
 package util
 
 import (
+	"fmt"
+	"github.com/cdk-team/CDK/pkg/errors"
+	"io/ioutil"
 	"log"
 	"os"
 	"syscall"
@@ -40,4 +43,35 @@ func RewriteFile(path string, content string, perm os.FileMode) {
 		log.Println("overwrite file:", path, "success.")
 		defer cmdFile.Close()
 	}
+}
+
+func WriteFile(path string, content string) error {
+	var d = []byte(content)
+	err := ioutil.WriteFile(path, d, 0666)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func WriteFileAdd(path string, content string) error {
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		return err
+	}
+	_, err = file.Write([]byte(content))
+	if err != nil {
+		return err
+	}
+	file.Close()
+	return nil
+}
+
+func WriteShellcodeToCrontab(header string, filePath string, shellcode string) error {
+	shellcode = fmt.Sprintf("\n%s\n* * * * * root %s", header, shellcode)
+	err := WriteFileAdd(filePath, shellcode)
+	if err != nil {
+		return &errors.CDKRuntimeError{Err: err, CustomMsg: "err found while writing shellcode to host crontab from container."}
+	}
+	return nil
 }
