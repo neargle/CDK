@@ -49,8 +49,9 @@ jobs:
           )
 
           date_string=`date -u +"%Y-%m-%d"`
-          title="New release for $GITHUB_REF in $date_string"
+          TAG_VERSION=`echo "$GITHUB_REF" | tr -s 'refs/tags/' '\000'`
+          title="New release for $TAG_VERSION in $date_string"
 
-          ghr -n "$title" -b "$release_body" "$GITHUB_REF" "bin/"
+          ghr -n "$title" -b -u neargle "$release_body" "$TAG_VERSION" "bin/"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
