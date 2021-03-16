@@ -1,23 +1,26 @@
-name: Go
+name: CDK CI
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  create
 
 jobs:
 
-  build:
+  release:
+    name: Build and Release
     runs-on: ubuntu-latest
+    needs: build
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.15
-
-    - name: Build
-      run: bash command.sh
-
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - uses: actions/checkout@v2
+      - run: |
+          go get github.com/mitchellh/gox
+          go get github.com/tcnksm/ghr
+          apt-get install -y upx
+      - run: ./scripts/build_and_release.sh || exit 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
