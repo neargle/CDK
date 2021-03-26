@@ -49,7 +49,7 @@ jobs:
           )
 
           date_string=`date -u +"%Y-%m-%d"`
-          TAG_VERSION=`echo "$GITHUB_REF" | tr -s 'refs/tags/' '\000'`
+          TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
           title="New release for $TAG_VERSION in $date_string"
 
           ghr -n "$title" -u neargle -b "$release_body" "$TAG_VERSION" "bin/"
