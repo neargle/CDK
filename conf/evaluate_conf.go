@@ -32,6 +32,16 @@ var LinuxCommandChecklist = []string{
 	"capsh",
 	"mount",
 	"fdisk",
+	"gcc",
+	"g++",
+	"make",
+	"base64",
+	"python2",
+	"python2.7",
+	"perl",
+	"xterm",
+	"sudo",
+	"ruby",
 }
 
 // match ENV to find useful service
@@ -100,5 +110,17 @@ var CloudAPI = []cloudAPIS{
 		API:           "http://metadata.tencentyun.com/latest/meta-data/",
 		ResponseMatch: "instance-name",
 		DocURL:        "https://cloud.tencent.com/document/product/213/4934",
+	},
+	{
+		CloudProvider: "OpenStack",
+		API:           "http://169.254.169.254/openstack/latest/meta_data.json",
+		ResponseMatch: "availability_zone",
+		DocURL:        "https://docs.openstack.org/nova/rocky/user/metadata-service.html",
+	},
+	{
+		CloudProvider: "Amazon Web Services (AWS)",
+		API:           "http://169.254.169.254/latest/meta-data/",
+		ResponseMatch: "instance-id",
+		DocURL:        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html",
 	},
 }
