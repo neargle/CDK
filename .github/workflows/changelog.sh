@@ -1,6 +1,6 @@
 set -x
 
-last_tag=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+" | sed -n 1p`
+last_tag="$TAG_VERSION"
 previous_tag=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
 
 exploit=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/exploit/" | grep -viE ^merge`
