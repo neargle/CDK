@@ -18,6 +18,7 @@ jobs:
           node-version: 10.x
       - uses: actions/checkout@v2
       - run: |
+          set -x
           go get github.com/mitchellh/gox
           go get github.com/tcnksm/ghr
           sudo apt-get install -y upx
@@ -46,6 +47,7 @@ jobs:
           TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
 
       - run: |
+          set -x
           last_tag="$TAG_VERSION"
           previous_tag=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
 
