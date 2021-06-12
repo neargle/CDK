@@ -45,6 +45,7 @@ jobs:
 
           TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
 
+      - run: |
           last_tag="$TAG_VERSION"
           previous_tag=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
 
@@ -65,6 +66,7 @@ jobs:
           [[ $evaluate = *[^[:space:]]* ]] && evaluate=$'### About Evaluate\n\n'"${evaluate}"
           [[ $tool = *[^[:space:]]* ]] && tool=$'### Tools\n\n'"${tool}"
 
+      - run: |
           release_body=$(cat <<- EOF
           Release Date: $date_string
 
@@ -86,6 +88,6 @@ jobs:
 
           title="CDK $TAG_VERSION"
           ghr -n "$title" -b "$release_body" "$TAG_VERSION" "bin/"
-          
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
