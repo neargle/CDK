@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      
       - run: |
           set -x
           go get github.com/mitchellh/gox
@@ -42,6 +43,7 @@ jobs:
 
           cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
           upx bin/cdk_linux_386_thin_upx
+      
       - run: |
           set -x
 
@@ -89,8 +91,5 @@ jobs:
           )
 
           title="CDK $TAG_VERSION"
-          ghr -n "$title" -b "$release_body" -t "$RELEASE_TOKEN" "$TAG_VERSION" "bin/"
+          ghr -n "$title" -b "$release_body" -t "${RELEASE_TOKEN}" "$TAG_VERSION" "bin/"
 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
