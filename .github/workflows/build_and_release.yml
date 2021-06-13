@@ -59,7 +59,6 @@ jobs:
 
           add_before=`echo "$exploit\n$evaluate\n$tool" | uniq`
           all_commit_message=`git log "${last_tag}...${previous_tag}" --pretty=format:%s | grep -viE ^merge`
-
           other=`diff -u <(echo "$add_before") <(echo "$all_commit_message") | grep -E "^\+[a-zA-Z]" | cut -c 2-`
 
           exploit=`echo "$exploit" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
@@ -90,7 +89,8 @@ jobs:
           )
 
           title="CDK $TAG_VERSION"
-          ghr -n "$title" -b "$release_body" "$TAG_VERSION" "bin/"
+          ghr -n "$title" -b "$release_body" "$TAG_VERSION" "bin/" -t "$RELEASE_TOKEN"
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
