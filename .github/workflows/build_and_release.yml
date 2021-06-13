@@ -89,7 +89,7 @@ jobs:
           )
 
           title="CDK $TAG_VERSION"
-          ghr -n "$title" -b "$release_body" "$TAG_VERSION" "bin/" -t "$RELEASE_TOKEN"
+          ghr -n "$title" -b "$release_body" -t "$RELEASE_TOKEN" "$TAG_VERSION" "bin/"
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
