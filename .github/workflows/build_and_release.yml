@@ -19,12 +19,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Upload Archives to Release
-        env:
-          UPLOAD_URL: ${{ github.event.release.upload_url }}
-          API_HEADER: "Accept: application/vnd.github.v3+json"
-          AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
-          RELEASE_URL: ${{ github.event.release.url }}
 
       - run: |
           set -x
@@ -105,4 +99,8 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPLOAD_URL: ${{ github.event.release.upload_url }}
+          API_HEADER: "Accept: application/vnd.github.v3+json"
+          AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          RELEASE_URL: ${{ github.event.release.url }}
 
