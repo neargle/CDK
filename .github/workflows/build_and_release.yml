@@ -112,9 +112,9 @@ jobs:
 
           release_body=`echo "$release_body" | jq -sR .`
           curl \
-          -XPATCH \
-          -H "${API_HEADER}" \
-          -H "${AUTH_HEADER}" \
-          -H "Content-Type: application/json" \
-          -d "{\"body\": ${release_body}}" \
-          "${RELEASE_URL}";
+            -XPATCH \
+            -H "${API_HEADER}" \
+            -H "${AUTH_HEADER}" \
+            -H "Content-Type: application/json" \
+            -d "{\"name\": \"$title\",\"body\": ${release_body}}" \
+            "${RELEASE_URL}";
