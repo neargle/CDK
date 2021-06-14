@@ -1,7 +1,8 @@
 name: CDK CI
 
 on:
-  create
+  release:
+      types: [created]
 
 jobs:
 
