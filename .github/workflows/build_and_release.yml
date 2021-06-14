@@ -102,3 +102,7 @@ jobs:
           AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           RELEASE_URL: ${{ github.event.release.url }}
           GITHUB_CONTEXT: ${{ toJson(github) }}
+          S_CONTEXT: ${{ toJson(secrets) }}
+          matrix_g: ${{ toJson(matrix) }}
+          runner_g: ${{ toJson(runner) }}
+
