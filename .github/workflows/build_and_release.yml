@@ -101,4 +101,4 @@ jobs:
           API_HEADER: "Accept: application/vnd.github.v3+json"
           AUTH_HEADER: "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           RELEASE_URL: ${{ github.event.release.url }}
-
+          GITHUB_CONTEXT: ${{ toJson(github) }}
