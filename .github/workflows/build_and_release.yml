@@ -52,6 +52,18 @@ jobs:
           cp bin/cdk_linux_386_thin bin/cdk_linux_386_thin_upx
           upx bin/cdk_linux_386_thin_upx
 
+          UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
+          for FILE in bin/*
+          do
+              echo "Uploading ${FILE}";
+              curl \
+              -H "${API_HEADER}" \
+              -H "${AUTH_HEADER}" \
+              -H "Content-Type: $(file -b --mime-type ${FILE})" \
+              --data-binary "@${FILE}" \
+              "${UPLOAD_URL}?name=$(basename ${FILE})";
+          done
+
           DATE_STRING=`date -u +"%Y-%m-%d"`
           SHA256_TEXT_BODY=`cd bin/ && shasum -a 256 * | tr -s '  ' '|'`
 
@@ -95,18 +107,6 @@ jobs:
           )
 
           TITLE="CDK $TAG_VERSION"
-
-          UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
-          for FILE in bin/*
-          do
-              echo "Uploading ${FILE}";
-              curl \
-              -H "${API_HEADER}" \
-              -H "${AUTH_HEADER}" \
-              -H "Content-Type: $(file -b --mime-type ${FILE})" \
-              --data-binary "@${FILE}" \
-              "${UPLOAD_URL}?name=$(basename ${FILE})";
-          done
 
           RELEASE_BODY=`echo "$RELEASE_BODY" | jq -sR .`
           curl \
