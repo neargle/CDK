@@ -1,27 +1,30 @@
 set -x
 
-last_tag="$TAG_VERSION"
-previous_tag=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
+TAG_VERSION=`echo "$GITHUB_REF" | sed -e 's/refs\/tags\///'`
 
-exploit=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/exploit/" | grep -viE ^merge`
-evaluate=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/evaluate/" | grep -viE ^merge`
-tool=`git log "${last_tag}...${previous_tag}" --pretty=format:%s -- "pkg/tool/" | grep -viE ^merge`
+LAST_TAG="$TAG_VERSION"
+PREVIOUS_TAG=`git for-each-ref --sort='-authordate' --format="%(refname:short)" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$" | sed -n 2p`
 
-add_before=`echo "$exploit\n$evaluate\n$tool" | uniq`
-all_commit_message=`git log "${last_tag}...${previous_tag}" --pretty=format:%s | grep -viE ^merge`
+exploit=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s -- "pkg/exploit/" | grep -viE ^merge` | true
+evaluate=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s -- "pkg/evaluate/" | grep -viE ^merge` | true
+tool=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s -- "pkg/tool/" | grep -viE ^merge` | true
 
-other=`diff -u <(echo "$add_before") <(echo "$all_commit_message") | grep -E "^\+[a-zA-Z]" | cut -c 2-`
+add_before=`echo "$exploit\n$evaluate\n$tool" | uniq` | true
+all_commit_message=`git log "${LAST_TAG}...${PREVIOUS_TAG}" --pretty=format:%s | grep -viE ^merge` | true
+other=`diff -u <(echo "$add_before") <(echo "$all_commit_message") | grep -E "^\+[a-zA-Z]" | cut -c 2-` | true
 
-exploit=`echo "$exploit" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
-evaluate=`echo "$evaluate" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
-tool=`echo "$tool" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'`
+exploit=`echo "$exploit" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'` | true
+evaluate=`echo "$evaluate" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'` | true
+tool=`echo "$tool" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'` | true
+other=`echo "$other" | awk '{print toupper(substr($0,1,1))""substr($0,2)}' | sed -e 's/^/* /'` | true
 
 [[ $exploit = *[^[:space:]]* ]] && exploit=$'### Exploits\n\n'"$exploit"
 [[ $evaluate = *[^[:space:]]* ]] && evaluate=$'### About Evaluate\n\n'"${evaluate}"
 [[ $tool = *[^[:space:]]* ]] && tool=$'### Tools\n\n'"${tool}"
+[[ $other = *[^[:space:]]* ]] && other=$'### Others\n\n'"${other}"
 
-release_body=$(cat <<- EOF
-Release Date: $date_string
+RELEASE_BODY=$(cat <<- EOF
+Release Date: $DATE_STRING
 
 ## Changelog:
 
@@ -31,12 +34,17 @@ $evaluate
 
 $tool
 
+$other
+
 ## Hash Table
 
-|sha256|exectue file|
+|SHA256|EXECTUE FILE|
 |---|---|
-|$sha256_text_body|
+|$SHA256_TEXT_BODY|
 EOF
 )
 
-echo "$release_body" > /tmp/cl.md
+TITLE="CDK $TAG_VERSION"
+UPLOAD_URL=$(echo -n $UPLOAD_URL | sed s/\{.*//g)
+
+echo "$RELEASE_BODY" > /tmp/cl.md
